@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head><title>Tesla Tasker Plugin</title></head>
+<head>
+<title>Tesla Tasker Plugin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: sans-serif; text-align: center; padding: 40px 20px; background: #111; color: #fff; }
+  #btn { display: none; margin-top: 24px; padding: 14px 32px; background: #e31937;
+         color: white; text-decoration: none; border-radius: 10px; font-size: 17px; }
+</style>
+</head>
 <body>
+<p id="msg">Tesla Tasker Plugin으로 이동 중...</p>
+<a id="btn" href="#">앱으로 돌아가기</a>
 <script>
   var p = new URLSearchParams(window.location.search);
   var code = p.get('code'), state = p.get('state');
   if (code) {
-    location.href = 'teslatasker://callback?code=' + code + (state ? '&state=' + state : '');
+    var q = 'code=' + code + (state ? '&state=' + state : '');
+    var customUrl = 'teslatasker://callback?' + q;
+    var intentUrl  = 'intent://callback?' + q + '#Intent;scheme=teslatasker;end;';
+
+    document.getElementById('btn').href = customUrl;
+    document.getElementById('btn').style.display = 'inline-block';
+
+    if (/Android/i.test(navigator.userAgent)) {
+      location.href = intentUrl;
+    } else {
+      location.href = customUrl;
+    }
+  } else {
+    document.getElementById('msg').textContent = '오류: 인증 코드를 찾을 수 없습니다.';
   }
 </script>
-<p>Tesla Tasker Plugin으로 이동 중...</p>
 </body>
 </html>
