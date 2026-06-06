@@ -18,7 +18,10 @@
   if (code) {
     var q = 'code=' + code + (state ? '&state=' + state : '');
     var customUrl = 'teslatasker://callback?' + q;
-    var intentUrl  = 'intent://callback?' + q + '#Intent;scheme=teslatasker;end;';
+    // launchFlags=0x24000000 = FLAG_ACTIVITY_SINGLE_TOP|FLAG_ACTIVITY_CLEAR_TOP
+    // Ensures Chrome calls onNewIntent on the existing MainActivity instead of
+    // creating a new Activity instance (which would have empty credentials).
+    var intentUrl  = 'intent://callback?' + q + '#Intent;scheme=teslatasker;launchFlags=0x24000000;end;';
 
     document.getElementById('btn').href = customUrl;
     document.getElementById('btn').style.display = 'inline-block';
